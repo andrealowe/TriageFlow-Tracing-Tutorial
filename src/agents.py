@@ -1,10 +1,12 @@
 import json
 import re
-from models import (
+import mlflow
+from mlflow.entities import SpanType
+from .models import (
     Incident, Classification, ImpactAssessment, ResourceAssignment,
     ResponsePlan, Resource, Communication
 )
-from tools import (
+from .tools import (
     lookup_category_definitions, lookup_historical_incidents, calculate_impact_score,
     check_resource_availability, get_sla_requirements,
     get_communication_templates, get_stakeholder_list
@@ -149,6 +151,7 @@ def parse_json_response(response: str) -> dict:
     return json.loads(response)
 
 
+@mlflow.trace(span_type=SpanType.AGENT)
 def classify_incident(client, provider: str, model: str,
                       incident: Incident, config: dict) -> Classification:
     """Classify the incident using tools from config."""
@@ -162,6 +165,7 @@ def classify_incident(client, provider: str, model: str,
     return Classification(**parse_json_response(response))
 
 
+@mlflow.trace(span_type=SpanType.AGENT)
 def assess_impact(client, provider: str, model: str, incident: Incident,
                   classification: Classification, config: dict) -> ImpactAssessment:
     """Assess impact using tools from config."""
@@ -178,6 +182,7 @@ def assess_impact(client, provider: str, model: str, incident: Incident,
     return ImpactAssessment(**parse_json_response(response))
 
 
+@mlflow.trace(span_type=SpanType.AGENT)
 def match_resources(client, provider: str, model: str,
                     classification: Classification,
                     impact: ImpactAssessment, config: dict) -> ResourceAssignment:
@@ -198,6 +203,7 @@ def match_resources(client, provider: str, model: str,
     return ResourceAssignment(**data)
 
 
+@mlflow.trace(span_type=SpanType.AGENT)
 def draft_response(client, provider: str, model: str, incident: Incident,
                    classification: Classification, impact: ImpactAssessment,
                    resources: ResourceAssignment, config: dict) -> ResponsePlan:

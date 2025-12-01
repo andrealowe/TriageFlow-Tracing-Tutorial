@@ -1,0 +1,2 @@
+mlflow==3.2.0
+pip install "dominodatalab[agents] @ git+https://github.com/dominodatalab/python-domino.git@release-2.0.0"

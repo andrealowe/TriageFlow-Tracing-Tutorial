@@ -1,3 +1,8 @@
+import mlflow
+from mlflow.entities import SpanType
+
+
+@mlflow.trace(span_type=SpanType.TOOL)
 def lookup_category_definitions() -> dict:
     """Returns category definitions and classification criteria."""
     return {
@@ -39,6 +44,7 @@ def lookup_category_definitions() -> dict:
     }
 
 
+@mlflow.trace(span_type=SpanType.TOOL)
 def lookup_historical_incidents(category: str, subcategory: str, limit: int = 5) -> list[dict]:
     """Returns similar historical incidents."""
     historical_db = [
@@ -58,6 +64,7 @@ def lookup_historical_incidents(category: str, subcategory: str, limit: int = 5)
     return matches[:limit]
 
 
+@mlflow.trace(span_type=SpanType.TOOL)
 def calculate_impact_score(urgency: int, affected_users: int, affected_systems_count: int,
                            has_financial_impact: bool, has_compliance_implications: bool) -> float:
     """Calculates normalized impact score (0-10)."""
@@ -79,6 +86,7 @@ def calculate_impact_score(urgency: int, affected_users: int, affected_systems_c
     return min(base_score + user_score + system_score + financial_score + compliance_score, 10.0)
 
 
+@mlflow.trace(span_type=SpanType.TOOL)
 def check_resource_availability(required_skills: list[str], urgency: int) -> list[dict]:
     """Returns available resources matching required skills."""
     resource_pool = [
@@ -111,6 +119,7 @@ def check_resource_availability(required_skills: list[str], urgency: int) -> lis
     return sorted(resource_pool, key=lambda x: x["match_score"], reverse=True)
 
 
+@mlflow.trace(span_type=SpanType.TOOL)
 def get_sla_requirements(urgency: int, category: str) -> dict:
     """Returns SLA requirements based on urgency and category."""
     base_sla = {
@@ -129,6 +138,7 @@ def get_sla_requirements(urgency: int, category: str) -> dict:
     return sla
 
 
+@mlflow.trace(span_type=SpanType.TOOL)
 def get_communication_templates(category: str, urgency: int) -> dict:
     """Returns communication templates for different audiences."""
     return {
@@ -147,6 +157,7 @@ def get_communication_templates(category: str, urgency: int) -> dict:
     }
 
 
+@mlflow.trace(span_type=SpanType.TOOL)
 def get_stakeholder_list(category: str, impact_score: float, blast_radius: str) -> list[dict]:
     """Determines which stakeholders need notification."""
     stakeholders = [{"audience": "technical_team", "required": True, "notification_method": "immediate"}]
