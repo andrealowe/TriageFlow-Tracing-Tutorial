@@ -1,1 +1,0 @@
-Can you give me the insructions to install this in a Docker file? https://github.com/dominodatalab/python-domino/blob/release-2.0.0/README.md#dominoagentstracing

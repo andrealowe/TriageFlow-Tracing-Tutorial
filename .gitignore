@@ -1,5 +1,9 @@
 # Claude Code
 CLAUDE.md
+.claude/
+
+# Trash
+.Trash*/
 
 # Python
 __pycache__/
